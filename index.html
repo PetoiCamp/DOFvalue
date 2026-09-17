@@ -127,6 +127,7 @@
             border: 2px solid var(--accent-mid);
             border-radius: 12px;
             padding: 1.5rem;
+            max-width: 100%;
         }
 
         .highlight-text {
@@ -443,6 +444,47 @@
         [data-theme="paper"] .text-gray-500 { color: var(--text-dim) !important; }
         [data-theme="paper"] .text-white { color: var(--text) !important; }
         [data-theme="paper"] .divide-slate-700\/50 > :not([hidden]) ~ :not([hidden]) { border-color: rgba(15,23,42,0.08); }
+
+        /* ===== Overflow containment ===== */
+        /* Display math is wider than a phone screen; let it scroll inside its box
+           instead of stretching the page and pushing centered content off-screen. */
+        .katex-display {
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding: 0.25rem 0;
+        }
+        .chart-container, .plot-container { max-width: 100%; }
+        img, svg, video, canvas { max-width: 100%; }
+        /* Without this a grid track is sized by its widest item's min-content
+           (a KaTeX formula), which widens the whole page on narrow screens. */
+        main .grid > * { min-width: 0; }
+
+        /* ===== Mobile / tablet ===== */
+        @media (max-width: 1023px) {
+            body { font-size: 16px; }
+            .section-title { font-size: 1.6rem; overflow-wrap: break-word; }
+            .subsection-title { font-size: 1.2rem; }
+            .card-title { font-size: 1.05rem; }
+            .body-text { font-size: 1rem; }
+            .formula-box { padding: 1rem 0.75rem; }
+            /* Pinned desktop helper; on a phone it only covers the article. */
+            .floating-formula { display: none; }
+            /* Centering the tooltip on the symbol pushes it past the left edge. */
+            .tooltip-content {
+                left: 0;
+                transform: none;
+                white-space: normal;
+                width: max-content;
+                max-width: min(70vw, 260px);
+            }
+            #richTip { max-width: 80vw; }
+        }
+
+        @media (max-width: 640px) {
+            /* p-8 leaves only ~290px of content on a phone. */
+            main .glass-card { padding: 1.25rem; }
+            .timeline-item { padding-left: 1.5rem; }
+        }
     </style>
 </head>
 <body class="min-h-screen">
@@ -501,8 +543,8 @@
     <main class="lg:ml-72 p-4 lg:p-8 lg:pt-8 pt-20">
         <!-- Hero Section -->
         <section id="hero" class="min-h-[80vh] flex items-center justify-center">
-            <div class="text-center max-w-4xl">
-                <div class="glass-card p-8 lg:p-12">
+            <div class="text-center w-full min-w-0 max-w-4xl">
+                <div class="glass-card p-6 sm:p-8 lg:p-12">
                     <h1 class="text-4xl lg:text-6xl font-bold mb-6 hero-title">
                         <span class="highlight-text"><span class="en">Robot Degrees of Freedom</span><span class="zh">机器人自由度</span></span><br>
                         <span class="text-white"><span class="en">Feasibility Index</span><span class="zh">可行性指数</span></span>
@@ -1202,7 +1244,7 @@
                 <h2 class="section-title highlight-text"><span class="en">IV. Real-World Validation</span><span class="zh">四、现实产品验证</span></h2>
 
                 <div class="mb-6">
-                    <div class="flex gap-4 mb-4">
+                    <div class="flex flex-wrap gap-2 sm:gap-4 mb-4">
                         <button class="filter-btn px-4 py-2 bg-indigo-500 text-white rounded-lg text-sm" data-filter="all"><span class="en">All</span><span class="zh">全部</span></button>
                         <button class="filter-btn px-4 py-2 bg-slate-700 text-gray-300 rounded-lg text-sm hover:bg-slate-600" data-filter="high"><span class="en">High scalability</span><span class="zh">高可规模性</span></button>
                         <button class="filter-btn px-4 py-2 bg-slate-700 text-gray-300 rounded-lg text-sm hover:bg-slate-600" data-filter="medium"><span class="en">Mid band</span><span class="zh">中间区间</span></button>
