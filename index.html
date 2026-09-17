@@ -453,6 +453,11 @@
             overflow-y: hidden;
             padding: 0.25rem 0;
         }
+        /* Too wide even at the minimum font size: hint that it can be swiped. */
+        .katex-display.is-scrollable {
+            -webkit-mask-image: linear-gradient(to right, #000 88%, transparent 100%);
+            mask-image: linear-gradient(to right, #000 88%, transparent 100%);
+        }
         .chart-container, .plot-container { max-width: 100%; }
         img, svg, video, canvas { max-width: 100%; }
         /* Without this a grid track is sized by its widest item's min-content
@@ -2401,6 +2406,28 @@
         }, true);
 
         // ========== Initialize KaTeX ==========
+        // Display math has a fixed intrinsic width. On a narrow screen it would be
+        // clipped by its box, so shrink it to the available width; below the floor
+        // the box scrolls horizontally instead.
+        const MIN_FORMULA_FONT_PX = 12;
+
+        function fitDisplayFormulas() {
+            document.querySelectorAll('.katex-display').forEach(el => {
+                el.style.fontSize = '';
+                // KaTeX width is not perfectly proportional to font size, so converge.
+                for (let pass = 0; pass < 3; pass++) {
+                    const available = el.clientWidth;
+                    const needed = el.scrollWidth;
+                    if (!available || needed <= available) break;
+                    const base = parseFloat(getComputedStyle(el).fontSize);
+                    const next = Math.max(MIN_FORMULA_FONT_PX, base * available / needed - 0.25);
+                    if (next >= base) break;
+                    el.style.fontSize = next + 'px';
+                }
+                el.classList.toggle('is-scrollable', el.scrollWidth > el.clientWidth + 1);
+            });
+        }
+
         document.addEventListener("DOMContentLoaded", function() {
             renderMathInElement(document.body, {
                 delimiters: [
@@ -2409,6 +2436,17 @@
                 ],
                 throwOnError: false
             });
+            fitDisplayFormulas();
+            // Measuring before the math fonts land underestimates the width.
+            if (document.fonts && document.fonts.ready) {
+                document.fonts.ready.then(fitDisplayFormulas);
+            }
+        });
+
+        let formulaFitTimer = null;
+        window.addEventListener('resize', () => {
+            clearTimeout(formulaFitTimer);
+            formulaFitTimer = setTimeout(fitDisplayFormulas, 150);
         });
 
         // ========== Scroll Indicator ==========
