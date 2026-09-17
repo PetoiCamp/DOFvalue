@@ -2443,10 +2443,23 @@
             }
         });
 
+        // Plotly margins and point labels that work on a desktop leave almost no
+        // plotting area on a phone, so the charts switch to a compact layout.
+        function isNarrowViewport() {
+            return window.innerWidth < 768;
+        }
+
         let formulaFitTimer = null;
+        let wasNarrowViewport = isNarrowViewport();
         window.addEventListener('resize', () => {
             clearTimeout(formulaFitTimer);
-            formulaFitTimer = setTimeout(fitDisplayFormulas, 150);
+            formulaFitTimer = setTimeout(() => {
+                fitDisplayFormulas();
+                if (isNarrowViewport() === wasNarrowViewport) return;
+                wasNarrowViewport = isNarrowViewport();
+                if (typeof renderChart === 'function') renderChart();
+                if (typeof renderSDSurface === 'function') renderSDSurface();
+            }, 150);
         });
 
         // ========== Scroll Indicator ==========
@@ -2903,10 +2916,13 @@
             });
             const chartPos = products.map(p => posMap[p.nameEn.replace('🚗 ','')] || 'right center');
 
+            const narrow = isNarrowViewport();
+
             const trace1 = {
                 x: chartX,
                 y: products.map(p => p.phi > 900 ? 1.5 : p.phi),
-                mode: 'markers+text',
+                // Labels would overlap into an unreadable cluster on a phone.
+                mode: narrow ? 'markers' : 'markers+text',
                 type: 'scatter',
                 text: chartLabels,
                 textposition: chartPos,
@@ -2948,11 +2964,11 @@
                 },
                 annotations: annotations,
                 showlegend: false,
-                margin: { t: 20, b: 50, l: 60, r: 200 }
+                margin: narrow ? { t: 20, b: 46, l: 46, r: 16 } : { t: 20, b: 50, l: 60, r: 200 }
             };
 
             try {
-                Plotly.newPlot('dofChart', [trace1], layout, {responsive: true});
+                Plotly.newPlot('dofChart', [trace1], layout, {responsive: true, displayModeBar: !narrow});
             } catch (e) {
                 console.error('Chart rendering error:', e);
             }
@@ -2965,6 +2981,7 @@
 
         function renderSDSurface() {
             const isEn = currentLang === 'en';
+            const narrow = isNarrowViewport();
 
             const K_sd = 0.4497, alpha_sd = 0.7, c_sd = 0.04;
 
@@ -3114,18 +3131,27 @@
                     paper_bgcolor: 'rgba(0,0,0,0)',
                     plot_bgcolor: 'rgba(0,0,0,0)',
                     font: { color: '#94a3b8' },
-                    title: { text: isEn ? `${activeTierConfig.label} Tier (T=${activeTierConfig.T}h, MTBF=${activeTierConfig.MTBF}h, D<sub>t</sub>=${activeTierConfig.Dt})` : `${activeTierConfig.label} (T=${activeTierConfig.T}h, MTBF=${activeTierConfig.MTBF}h, D<sub>t</sub>=${activeTierConfig.Dt})`, font: { size: 14, color: activeTierConfig.color } },
+                    title: {
+                        // The full parameter list does not fit a phone width; the tier
+                        // tabs above already spell out T and MTBF.
+                        text: narrow
+                            ? `${activeTierConfig.label} · D<sub>t</sub>=${activeTierConfig.Dt}`
+                            : (isEn ? `${activeTierConfig.label} Tier (T=${activeTierConfig.T}h, MTBF=${activeTierConfig.MTBF}h, D<sub>t</sub>=${activeTierConfig.Dt})` : `${activeTierConfig.label} (T=${activeTierConfig.T}h, MTBF=${activeTierConfig.MTBF}h, D<sub>t</sub>=${activeTierConfig.Dt})`),
+                        font: { size: narrow ? 12 : 14, color: activeTierConfig.color }
+                    },
                     xaxis: { title: isEn ? 'Active DoF Dₐ' : '主动自由度 Dₐ', gridcolor: 'rgba(255,255,255,0.1)', zerolinecolor: 'rgba(255,255,255,0.2)', range: [0, 8] },
                     yaxis: { title: isEn ? 'Feasibility F' : '可行性 F', gridcolor: 'rgba(255,255,255,0.1)', zerolinecolor: 'rgba(255,255,255,0.2)', range: [0, 1.3] },
                     showlegend: true,
-                    legend: { x: 1.02, y: 0.5, xanchor: 'left', yanchor: 'middle', bgcolor: 'rgba(15, 23, 42, 0.8)', bordercolor: 'rgba(255,255,255,0.1)', borderwidth: 1 },
+                    legend: narrow
+                        ? { orientation: 'h', x: 0, y: -0.2, xanchor: 'left', yanchor: 'top', font: { size: 10 }, bgcolor: 'rgba(15, 23, 42, 0.8)', bordercolor: 'rgba(255,255,255,0.1)', borderwidth: 1 }
+                        : { x: 1.02, y: 0.5, xanchor: 'left', yanchor: 'middle', bgcolor: 'rgba(15, 23, 42, 0.8)', bordercolor: 'rgba(255,255,255,0.1)', borderwidth: 1 },
                     shapes: shapes,
                     annotations: annotations,
-                    margin: { t: 50, b: 50, l: 60, r: 160 }
+                    margin: narrow ? { t: 44, b: 96, l: 46, r: 16 } : { t: 50, b: 50, l: 60, r: 160 }
                 };
 
                 try {
-                    Plotly.newPlot('sdSurfaceChart', allTraces, layout, {responsive: true});
+                    Plotly.newPlot('sdSurfaceChart', allTraces, layout, {responsive: true, displayModeBar: !narrow});
                 } catch (e) {
                     console.error('S-D Surface chart error:', e);
                 }
