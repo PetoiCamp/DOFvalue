@@ -42,9 +42,9 @@
             --bg1: #ebe6dc;
             --surface: rgba(255, 255, 255, 0.92);
             --surface-2: rgba(255, 255, 255, 0.85);
-            --text: #1e293b;
-            --text-muted: #334155;
-            --text-dim: #64748b;
+            --text: #0f172a;
+            --text-muted: #1e293b;
+            --text-dim: #475569;
             --accent: #0f766e;
             --accent-2: #0369a1;
             --accent-soft: rgba(15, 118, 110, 0.08);
@@ -324,6 +324,7 @@
         }
         #richTip .formula { color: var(--tip-formula); font-family: 'KaTeX_Math', serif; font-style: italic; font-size: 1.05em; }
         #richTip .val { color: #34d399; font-weight: 600; }
+        [data-theme="paper"] #richTip .val { color: #047857; }
         #richTip sub { font-size: 0.75em; vertical-align: sub; }
         #richTip sup { font-size: 0.75em; vertical-align: super; }
 
@@ -363,6 +364,29 @@
         [data-theme="paper"] .lang-toggle button.active,
         [data-theme="paper"] .theme-toggle button.active {
             color: #fff;
+        }
+        /* Open-source callout: accent-2 so it pops vs indigo/teal note body on both themes */
+        .opensource-note {
+            color: var(--accent-2) !important;
+            font-weight: 600;
+        }
+        .opensource-note a,
+        a.opensource-note {
+            color: var(--accent-2);
+            font-weight: 700;
+            text-decoration: underline;
+            text-decoration-thickness: 2px;
+            text-underline-offset: 3px;
+            transition: color 0.2s ease, filter 0.2s ease;
+        }
+        .opensource-note a:hover,
+        a.opensource-note:hover {
+            color: var(--accent);
+            filter: brightness(1.08);
+        }
+        [data-theme="paper"] .opensource-note a:hover,
+        [data-theme="paper"] a.opensource-note:hover {
+            filter: brightness(0.92);
         }
         .chrome-controls {
             display: flex;
@@ -438,12 +462,49 @@
         [data-theme="paper"] .border-pink-500\/30 { border-color: var(--accent-mid) !important; }
         [data-theme="paper"] .bg-slate-800\/50,
         [data-theme="paper"] .bg-slate-700\/50,
-        [data-theme="paper"] .bg-slate-700 { background-color: rgba(15, 23, 42, 0.04) !important; }
-        [data-theme="paper"] .text-gray-300,
-        [data-theme="paper"] .text-gray-400,
-        [data-theme="paper"] .text-gray-500 { color: var(--text-dim) !important; }
+        [data-theme="paper"] .bg-slate-700,
+        [data-theme="paper"] .bg-slate-900\/40 { background-color: rgba(15, 23, 42, 0.04) !important; }
+        [data-theme="paper"] .border-slate-700\/50,
+        [data-theme="paper"] .border-slate-700\/60 { border-color: rgba(15, 23, 42, 0.12) !important; }
+        /* Neutrals: dark-theme grays are too light on cream */
         [data-theme="paper"] .text-white { color: var(--text) !important; }
+        [data-theme="paper"] .text-gray-200,
+        [data-theme="paper"] .text-slate-200,
+        [data-theme="paper"] .text-gray-300,
+        [data-theme="paper"] .text-slate-300 { color: #1e293b !important; }
+        [data-theme="paper"] .text-gray-400,
+        [data-theme="paper"] .text-slate-400 { color: #334155 !important; }
+        [data-theme="paper"] .text-gray-500,
+        [data-theme="paper"] .text-slate-500 { color: #475569 !important; }
+        [data-theme="paper"] .text-gray-600,
+        [data-theme="paper"] .text-slate-600 { color: #64748b !important; }
+        /* Semantic pastels → darker readable hues on paper */
+        [data-theme="paper"] .text-green-300,
+        [data-theme="paper"] .text-green-400,
+        [data-theme="paper"] .text-green-400\/70,
+        [data-theme="paper"] .text-emerald-400 { color: #047857 !important; }
+        [data-theme="paper"] .text-red-200,
+        [data-theme="paper"] .text-red-300,
+        [data-theme="paper"] .text-red-400,
+        [data-theme="paper"] .text-red-400\/70 { color: #b91c1c !important; }
+        [data-theme="paper"] .text-yellow-300,
+        [data-theme="paper"] .text-yellow-400,
+        [data-theme="paper"] .text-yellow-400\/70,
+        [data-theme="paper"] .text-amber-400 { color: #b45309 !important; }
+        [data-theme="paper"] .text-blue-300,
+        [data-theme="paper"] .text-blue-400,
+        [data-theme="paper"] .text-blue-400\/70 { color: #1d4ed8 !important; }
+        [data-theme="paper"] .text-cyan-300,
+        [data-theme="paper"] .text-cyan-400 { color: #0e7490 !important; }
+        [data-theme="paper"] .text-orange-400 { color: #c2410c !important; }
         [data-theme="paper"] .divide-slate-700\/50 > :not([hidden]) ~ :not([hidden]) { border-color: rgba(15,23,42,0.08); }
+        /* Soft tint chips keep readable label color */
+        [data-theme="paper"] .bg-green-500\/20 { background-color: rgba(4, 120, 87, 0.12) !important; }
+        [data-theme="paper"] .bg-red-500\/10,
+        [data-theme="paper"] .bg-red-500\/20 { background-color: rgba(185, 28, 28, 0.1) !important; }
+        [data-theme="paper"] .bg-yellow-500\/20 { background-color: rgba(180, 83, 9, 0.12) !important; }
+        [data-theme="paper"] .bg-blue-500\/20 { background-color: rgba(29, 78, 216, 0.1) !important; }
+        [data-theme="paper"] .katex { color: var(--text) !important; }
 
         /* ===== Overflow containment ===== */
         /* Display math is wider than a phone screen; let it scroll inside its box
@@ -725,8 +786,11 @@
                     <p class="body-text-sm text-indigo-300 mb-2">
                         <span class="en"><strong>📌 Formula Note:</strong> This formula offers a <strong>thinking dimension</strong> — a quantifiable engineering assessment baseline for comparing robot products across industries and eras on the same axis. The specific algebraic form is <strong>not sacred</strong>: capability, complexity, and reliability terms can be redefined (power, exponential, rational, piecewise, etc.) as long as the resulting ranking still matches real-world market outcomes.</span><span class="zh"><strong>📌 公式说明：</strong>本公式提供的是一种<strong>思考维度</strong>——可量化的工程评估基准，使不同行业、不同时期的机器人产品能在同一轴上比较。具体代数形式<strong>并非教条</strong>：能力项、复杂度项、可靠性项都可以重新定义（幂次、指数、有理式、分段等），只要最终排序仍与现实市场表现吻合即可。</span>
                     </p>
-                    <p class="body-text-sm text-indigo-300">
+                    <p class="body-text-sm text-indigo-300 mb-2">
                         <span class="en">Parameter choices involve subjectivity; users should calibrate themselves. Validation means the model <strong>fits known products without overfitting</strong> — capturing the main structure (capability ↑, complexity/reliability ↓ with DoF) rather than tuning coefficients to memorize every outlier. If a revised form matches reality at least as well and stays simple, it is a legitimate improvement of the same framework.</span><span class="zh">参数选取有主观性，用户可自行标定。有效验证是指模型<strong>拟合已知产品、且不过拟合</strong>——抓住主结构（能力随自由度提升，复杂度/可靠性随自由度下降），而不是靠调参记住每一个特例。若改写后的形式同样贴合现实且保持简洁，就是对同一框架的正当改进。</span>
+                    </p>
+                    <p class="body-text-sm opensource-note">
+                        <span class="en">The formula, chart data, and calculations used on this page are open-sourced at <a href="https://github.com/PetoiCamp/DOFvalue" class="opensource-note" target="_blank" rel="noopener noreferrer">github.com/PetoiCamp/DOFvalue</a> — inspection and improvement are welcome.</span><span class="zh">本页公式、图表所用数据与计算均开源在 <a href="https://github.com/PetoiCamp/DOFvalue" class="opensource-note" target="_blank" rel="noopener noreferrer">github.com/PetoiCamp/DOFvalue</a>，欢迎检验与改进。</span>
                     </p>
                 </div>
 
@@ -1505,7 +1569,7 @@
                         <p class="body-text-sm mt-2 text-gray-400"><span class="en">Base D stays at 4, but equivalent function density rises from S≈1.1 to S≈1.8.</span><span class="zh">基础 D 保持为 4，但单位自由度的等效功能密度从 S≈1.1 提升到 S≈1.8。</span></p>
                     </div>
 
-                    <div class="bg-slate-900/40 rounded-lg p-5 border border-slate-700/60">
+                    <div class="bg-slate-800/50 rounded-lg p-5 border border-slate-700/50">
                         <h4 class="font-semibold text-cyan-300 mb-3"><span class="en">🎨 Multicolor Printing: AMS vs Toolhead Swapping</span><span class="zh">🎨 多色打印：AMS vs 换头</span></h4>
                         <p class="body-text-sm mb-4"><span class="en">A more accurate statement is not "AMS always beats swapping," but that <strong>both schemes reuse the existing XY motion</strong> while moving the switching cost to different places. If we assume they use the <strong>same motor tier</strong>, then motor-level MTBF should be held constant. Under that fairer constraint, AMS keeps one toolhead coordinate system but pays in cut / unload / load / purge, while Snapmaker-style swapping reuses XY motion to pick up heads from the rack and can also wipe through XY reuse, but pays in docking repeatability, reheating, and recalibration. Using the article's current F formula with a shared <strong>MTBF≈6kh</strong>, a conservative estimate gives <strong>Bambu + AMS at F≈0.58</strong> and <strong>Snapmaker toolhead swapping at F≈0.57</strong>.</span><span class="zh">更准确的说法不是“AMS 一定优于换头”，而是：<strong>两种方案都在复用既有的 XY 运动自由度</strong>，只是把切换成本分配到了不同位置。如果假设两者使用的是<strong>同一级别的电机</strong>，那么电机层面的 MTBF 就应当保持一致。在这个更公平的约束下，AMS 保持同一打印头坐标系，但要付出 cut / unload / load / purge 的代价；Snapmaker 式换头则通过 XY 复用去打印头架抓取打印头，也能用 XY 完成 wipe，但代价转移到了对接重复精度、再加热和重新校准。按本文当前使用的 F 公式，并固定 <strong>MTBF≈6kh</strong> 做保守估算，<strong>Bambu + AMS 的 F≈0.58</strong>，<strong>Snapmaker 换头的 F≈0.57</strong>。</span></p>
                         <div class="overflow-x-auto">
@@ -2306,7 +2370,7 @@
                         <span class="en">$$\text{Scalability} \propto \frac{\text{Functional Density}}{\text{Complexity Penalty}}$$</span><span class="zh">$$\text{可规模化程度} \propto \frac{\text{功能密度}}{\text{复杂度惩罚}}$$</span>
                     </div>
                     <p class="body-text text-gray-400 mt-6">
-                        <span class="en">This framework is offered as a starting point, not a finished result. If a different functional form ranks real products at least as well while staying simple, that is an improvement of the same framework — and the framework invites that challenge.</span><span class="zh">本框架是一个起点，而非最终结论。如果另一种函数形式能在同样简洁的前提下、对现实产品给出至少同样好的排序，那就是对同一框架的改进——本框架欢迎这样的挑战。</span>
+                        <span class="en">This framework is offered as a starting point, not a finished result. If a different functional form ranks real products at least as well while staying simple, that is an improvement of the same framework — and the framework invites that challenge. The formula, chart data, and calculations are open-sourced at <a href="https://github.com/PetoiCamp/DOFvalue" class="opensource-note" target="_blank" rel="noopener noreferrer">github.com/PetoiCamp/DOFvalue</a>.</span><span class="zh">本框架是一个起点，而非最终结论。如果另一种函数形式能在同样简洁的前提下、对现实产品给出至少同样好的排序，那就是对同一框架的改进——本框架欢迎这样的挑战。公式、图表所用数据与计算均开源在 <a href="https://github.com/PetoiCamp/DOFvalue" class="opensource-note" target="_blank" rel="noopener noreferrer">github.com/PetoiCamp/DOFvalue</a>。</span>
                     </p>
                 </div>
             </div>

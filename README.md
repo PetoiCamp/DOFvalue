@@ -38,7 +38,7 @@ F = \frac{K \cdot \left[1 + \left(\dfrac{D_e}{D_t}\right)^{\alpha}\right] \cdot 
 
 The page also discusses **structure reuse \(S = D_e / D_a\)**, an optional **extra-structural term \(E\)** (institutional or emotional / life-like value), and product cases from appliances and cars to vacuums, drones, 3D printers, arms, and quadrupeds.
 
-> This is a **thinking framework**. The specific algebraic form can be redefined as long as rankings still match reality and the model does not overfit.
+> This is a **thinking framework**. The specific algebraic form can be redefined as long as rankings still match reality and the model does not overfit. Formula, chart data, and calculations are open-sourced at [github.com/PetoiCamp/DOFvalue](https://github.com/PetoiCamp/DOFvalue) — inspection and improvement are welcome.
 
 ---
 
@@ -129,7 +129,7 @@ F = \frac{K \cdot \left[1 + \left(\dfrac{D_e}{D_t}\right)^{\alpha}\right] \cdot 
 
 页面还讨论**结构复用 \(S = D_e / D_a\)**、可选的**非结构附加项 \(E\)**（制度支持或情绪 / 生命感），以及从家电、汽车到扫地机、无人机、3D 打印机、机械臂、四足等产品对照。
 
-> 这是一种**思考维度**。具体代数形式可以重定义，只要排序仍贴合现实、且不过拟合即可。
+> 这是一种**思考维度**。具体代数形式可以重定义，只要排序仍贴合现实、且不过拟合即可。公式、图表所用数据与计算均开源在 [github.com/PetoiCamp/DOFvalue](https://github.com/PetoiCamp/DOFvalue)，欢迎检验与改进。
 
 ---
 
