@@ -1529,7 +1529,7 @@
                             <h4 class="font-semibold text-red-400 mb-3"><span class="en">Traditional Desktop FDM Printer</span><span class="zh">传统桌面 FDM 打印机</span></h4>
                             <ul class="space-y-2 text-sm text-gray-400">
                                 <li><span class="en">D = 4 (X, Y, Z, E extrusion)</span><span class="zh">D = 4 (X, Y, Z, E挤出)</span></li>
-                                <li><span class="en">S ≈ 1.1 (DoF mostly independent)</span><span class="zh">S ≈ 1.1 (自由度基本独立)</span></li>
+                                <li><span class="en">S = 1.0 (one function per axis, no reuse)</span><span class="zh">S = 1.0（每轴一项功能，无复用）</span></li>
                                 <li><span class="en">Multi-material usually needs extra drives</span><span class="zh">多材料通常需要额外驱动</span></li>
                                 <li><span class="en">Complex maintenance and frequent tuning</span><span class="zh">维护复杂，调试频繁</span></li>
                                 <li class="text-red-400 font-semibold"><span class="en">F ≈ 0.43 → Constrained scalability</span><span class="zh">F ≈ 0.43 → 受限可规模性</span></li>
@@ -1539,7 +1539,7 @@
                             <h4 class="font-semibold text-green-400 mb-3"><span class="en">Bambu Base Platform ✅</span><span class="zh">Bambu 基础平台 ✅</span></h4>
                             <ul class="space-y-2 text-sm text-gray-400">
                                 <li><span class="en">D = 4 (still XYZ+E)</span><span class="zh">D = 4 (仍然 XYZ+E)</span></li>
-                                <li><span class="en">S ≈ 1.8 (motion reuses trigger extra functions)</span><span class="zh">S ≈ 1.8（运动复用触发额外功能）</span></li>
+                                <li><span class="en">S = 1.8 (three extra functions, no extra motors)</span><span class="zh">S = 1.8（三项额外功能，无额外电机）</span></li>
                                 <li><span class="en">Auto cutting / switching / wiping</span><span class="zh">自动切料 / 换料 / 擦嘴</span></li>
                                 <li><span class="en">No extra active motors on toolhead side</span><span class="zh">打印端无需增加额外主动电机</span></li>
                                 <li class="text-yellow-400 font-semibold"><span class="en">F ≈ 0.53 → Moves up into the scalable band</span><span class="zh">F ≈ 0.53 → 上移进入可规模化区间</span></li>
@@ -1562,23 +1562,23 @@
                                     <td class="p-3"><span class="en">Filament Cutting</span><span class="zh">切料</span></td>
                                     <td class="p-3 body-text-sm"><span class="en">Requires extra motor</span><span class="zh">需额外电机</span></td>
                                     <td class="p-3 text-green-400"><span class="en">Triggered by nozzle displacement</span><span class="zh">利用喷头位移触发</span></td>
-                                    <td class="p-3 text-center text-green-400">+0.2</td>
+                                    <td class="p-3 text-center text-green-400">+0.25</td>
                                 </tr>
                                 <tr>
                                     <td class="p-3"><span class="en">Filament Switching</span><span class="zh">换料</span></td>
                                     <td class="p-3 body-text-sm"><span class="en">Requires complex mechanism</span><span class="zh">需复杂机构</span></td>
                                     <td class="p-3 text-green-400"><span class="en">Triggered by nozzle impact</span><span class="zh">喷头撞击触发</span></td>
-                                    <td class="p-3 text-center text-green-400">+0.3</td>
+                                    <td class="p-3 text-center text-green-400">+0.25</td>
                                 </tr>
                                 <tr>
                                     <td class="p-3"><span class="en">Nozzle Wiping</span><span class="zh">擦嘴</span></td>
                                     <td class="p-3 body-text-sm"><span class="en">Motorized or manual</span><span class="zh">电机或手动</span></td>
                                     <td class="p-3 text-green-400"><span class="en">Completed by fixed structure</span><span class="zh">固定结构完成</span></td>
-                                    <td class="p-3 text-center text-green-400">+0.2</td>
+                                    <td class="p-3 text-center text-green-400">+0.25</td>
                                 </tr>
                             </tbody>
                         </table>
-                        <p class="body-text-sm mt-2 text-gray-400"><span class="en">Base D stays at 4, but equivalent function density rises from S≈1.1 to S≈1.8.</span><span class="zh">基础 D 保持为 4，但单位自由度的等效功能密度从 S≈1.1 提升到 S≈1.8。</span></p>
+                        <p class="body-text-sm mt-2 text-gray-400"><span class="en">Base D stays at 4. Cut, switch, and wipe each add one equivalent function, so D<sub>e</sub> goes from 4 to 7 and S goes from 1.0 to 1.8 (7/4, shown to one decimal).</span><span class="zh">基础 D 保持为 4。切料、换料、擦嘴各增加一项等效功能，D<sub>e</sub> 从 4 到 7，S 从 1.0 到 1.8（7/4，表中保留一位小数）。</span></p>
                     </div>
 
                     <div class="bg-slate-800/50 rounded-lg p-5 border border-slate-700/50">
@@ -2874,11 +2874,11 @@
 
             // === 3D Printers (consumer BLDC, annual service) ===
             { name: '3D打印机(传统FDM)', nameEn: '3D Printer (Traditional FDM)', d: 4, de: 4, dt: 4, mtbf: 6000, session: 2, freq: 0.5, days: 365, market: '利基/爱好者', marketEn: 'Niche/Hobby', category: 'medium',
-              sReason: 'XYZ+E 4轴；自由度基本独立S≈1.1；多材料需额外驱动；MTBF 取消费机电档 6kh；年度维护',
-              sReasonEn: 'XYZ+E 4-axis; DoF mostly independent S≈1.1; multi-material needs extra drives; MTBF: consumer electromechanical band, 6kh; annual service' },
+              sReason: 'XYZ+E 4轴；每轴一项功能，无复用，S=1.0；多材料需额外驱动；MTBF 取消费机电档 6kh；年度维护',
+              sReasonEn: 'XYZ+E 4-axis; one function per axis, no reuse, S=1.0; multi-material needs extra drives; MTBF: consumer electromechanical band, 6kh; annual service' },
             { name: '3D打印机(Bambu)', nameEn: '3D Printer (Bambu Lab)', d: 4, de: 7, dt: 4, mtbf: 6000, session: 2, freq: 0.5, days: 365, market: '接近主流', marketEn: 'Near Mainstream', category: 'medium',
-              sReason: 'D=4不变；结构复用切料/换料/擦嘴，S≈1.8；无额外电机；MTBF 取消费机电档 6kh',
-              sReasonEn: 'D=4 unchanged; structure reuse for cut/switch/wipe, S≈1.8; no extra motors; MTBF: consumer electromechanical band, 6kh' },
+              sReason: 'D=4不变；切料/换料/擦嘴各增加一项等效功能，De=7，S=1.8；无额外电机；MTBF 取消费机电档 6kh',
+              sReasonEn: 'D=4 unchanged; cut/switch/wipe each add one equivalent function, De=7, S=1.8; no extra motors; MTBF: consumer electromechanical band, 6kh' },
 
             // === Toy Servo Quadrupeds (plastic gear ~300h, 3-month replacement) ===
 
